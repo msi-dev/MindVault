@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Top Editor Actions Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="8dp"
+            android:background="@color/surface"
+            android:elevation="1dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                app:tint="@color/textPrimary"
+                android:contentDescription="Back" />
+
+            <!-- Save Status Indicator -->
+            <TextView
+                android:id="@+id/text_save_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textSize="13sp"
+                android:textColor="@color/textMuted"
+                android:text="@string/status_saved" />
+
+            <!-- Pin Toggle -->
+            <ImageButton
+                android:id="@+id/btn_pin"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_pin"
+                app:tint="@color/textSecondary"
+                android:contentDescription="Pin note" />
+
+            <!-- Archive Action -->
+            <ImageButton
+                android:id="@+id/btn_archive"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_archive"
+                app:tint="@color/textSecondary"
+                android:contentDescription="Archive note" />
+
+            <!-- Delete Action -->
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/textSecondary"
+                android:contentDescription="Delete note" />
+
+            <!-- Save Action Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/action_save"
+                app:icon="@drawable/ic_save"
+                app:iconSize="16dp"
+                android:textSize="13sp"
+                android:paddingHorizontal="12dp" />
+        </LinearLayout>
+
+        <!-- Editor Scrollable Body -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Category Selector Spinner / Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@color/textSecondary"
+                        android:text="Category:" />
+
+                    <Spinner
+                        android:id="@+id/spinner_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_badge_rounded"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp" />
+                </LinearLayout>
+
+                <!-- Tags Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_add_tag"
+                            style="@style/Widget.Material3.Chip.Assist"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+ Add Tag"
+                            app:chipIcon="@drawable/ic_tag"
+                            app:chipIconSize="16dp" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+
+                <!-- Title Input -->
+                <EditText
+                    android:id="@+id/edit_note_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/note_title_hint"
+                    android:textColorHint="@color/textMuted"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:inputType="textCapSentences"
+                    android:maxLines="3"
+                    android:layout_marginBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Content Input -->
+                <EditText
+                    android:id="@+id/edit_note_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="12"
+                    android:gravity="top|start"
+                    android:background="@null"
+                    android:hint="@string/note_content_hint"
+                    android:textColorHint="@color/textMuted"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="5dp"
+                    android:inputType="textMultiLine|textCapSentences" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Native Engine Text Metrics Footer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/surfaceVariant"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/text_footer_metrics"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary"
+                android:text="0 words · 0 characters · 0 min read" />
+
+            <TextView
+                android:id="@+id/text_engine_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="@color/primary"
+                android:text="NDK Engine" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

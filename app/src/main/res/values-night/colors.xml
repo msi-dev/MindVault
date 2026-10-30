@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#B3C5FF</color>
+    <color name="onPrimary">#142F6B</color>
+    <color name="primaryContainer">#2C4480</color>
+    <color name="onPrimaryContainer">#D9E2FF</color>
+    
+    <color name="secondary">#BBC6DF</color>
+    <color name="onSecondary">#273247</color>
+    <color name="secondaryContainer">#3D485E</color>
+    <color name="onSecondaryContainer">#DDE2F9</color>
+
+    <color name="accent">#A4B9F5</color>
+    
+    <color name="background">#111318</color>
+    <color name="onBackground">#E2E2EA</color>
+    
+    <color name="surface">#191C23</color>
+    <color name="onSurface">#E2E2EA</color>
+    <color name="surfaceVariant">#242833</color>
+    <color name="onSurfaceVariant">#C5C8D4</color>
+    
+    <color name="cardBackground">#191C23</color>
+    <color name="cardBorder">#282D3A</color>
+    <color name="divider">#2C313D</color>
+    
+    <color name="textPrimary">#E2E2EA</color>
+    <color name="textSecondary">#9FA5B5</color>
+    <color name="textMuted">#6B7280</color>
+    
+    <!-- Category Colors -->
+    <color name="cat_personal">#818CF8</color>
+    <color name="cat_ideas">#FBBF24</color>
+    <color name="cat_work">#60A5FA</color>
+    <color name="cat_programming">#34D399</color>
+    <color name="cat_learning">#A78BFA</color>
+    <color name="cat_projects">#F472B6</color>
+    <color name="cat_uncategorized">#9CA3AF</color>
+</resources>

@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">MindVault</string>
+    <string name="tagline">Your knowledge. Your device. Your control.</string>
+    <string name="quote">A quiet place for everything worth remembering.</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_vault">Vault</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Home -->
+    <string name="notes_stat_label">Notes</string>
+    <string name="collections_stat_label">Collections</string>
+    <string name="recent_notes_title">Recent notes</string>
+    <string name="pinned_notes_title">Pinned notes</string>
+    <string name="view_all">View all</string>
+    <string name="search_vault_hint">Search in your vault…</string>
+    
+    <!-- Vault -->
+    <string name="vault_title">Knowledge Vault</string>
+    <string name="filter_all">All</string>
+    <string name="filter_pinned">Pinned</string>
+    <string name="empty_vault_title">Your vault is waiting.</string>
+    <string name="empty_vault_subtitle">Capture your first thought or idea.</string>
+    <string name="empty_search_title">No matching notes found</string>
+    <string name="empty_search_subtitle">Try different keywords or tags.</string>
+    
+    <!-- Editor -->
+    <string name="note_title_hint">Note title</string>
+    <string name="note_content_hint">Start writing or capture your thought…</string>
+    <string name="action_save">Save</string>
+    <string name="status_saved">Saved</string>
+    <string name="status_saving">Saving…</string>
+    <string name="add_tag_hint">Add tag…</string>
+    <string name="action_pin">Pin</string>
+    <string name="action_unpin">Unpin</string>
+    <string name="action_archive">Archive</string>
+    <string name="action_delete">Delete</string>
+    
+    <!-- Settings -->
+    <string name="settings_appearance_title">Appearance</string>
+    <string name="theme_system">Follow system</string>
+    <string name="theme_light">Always light</string>
+    <string name="theme_dark">Always dark</string>
+    <string name="settings_storage_title">Local Storage</string>
+    <string name="settings_about_title">About MindVault</string>
+    <string name="offline_guarantee">100% offline. Zero tracking. Your data never leaves your device.</string>
+</resources>

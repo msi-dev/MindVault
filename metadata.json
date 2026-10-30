@@ -1,0 +1,6 @@
+{
+  "name": "MindVault",
+  "description": "Private offline personal knowledge management system with Room FTS5, Material 3, and native C++ processing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

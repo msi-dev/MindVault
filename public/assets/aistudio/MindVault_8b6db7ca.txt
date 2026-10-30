@@ -1,0 +1,1768 @@
+### MindVault — Complete Android Application Blueprint
+
+We're going to design MindVault as a native Android application with a clear architecture, a polished interface, local data storage, and room for future C++ native processing.
+
+The application will have these principles:
+
+* 100% offline: No account, server, or internet connection required.
+
+* Local-first: All user data stays on the device.
+
+* Adaptive design: Light and dark themes, following Android system settings, with manual override.
+
+* Native Android: Java, XML layouts, Android SDK, Material Design 3.
+
+* Native engine: C++ NDK for future high-performance processing.
+
+* Expandable architecture: New features should not require rewriting the original application.
+
+### 1\. Product definition
+
+MindVault is a private personal knowledge management system.
+
+Its purpose is to capture, organize, search, and connect information.
+
+### MindVault
+
+Your knowledge. Your device. Your control.
+
+Quick Notes
+
+Capture thoughts instantly
+
+Smart Search
+
+Find saved information
+
+Collections
+
+Organize knowledge
+
+Connections
+
+Connect related ideas
+
+Network requirement
+
+None
+
+Data storage
+
+On-device
+
+Native processing
+
+C++ NDK
+
+### 2\. Complete development roadmap
+
+We will divide the project into five development phases.
+
+| Phase | Features                                           | Priority |
+| ----- | -------------------------------------------------- | -------- |
+| 1     | Core Vault, notes, tags, categories, search, theme | Now      |
+| 2     | Images, voice, files, attachments                  | Next     |
+| 3     | Knowledge graph and note relationships             | Later    |
+| 4     | Offline intelligence and semantic search           | Later    |
+| 5     | Encryption, backup, native optimization            | Later    |
+
+Phase 1 must be a complete, usable application on its own.
+
+### 3\. Phase 1 — UI and screen specifications
+
+### Navigation architecture
+
+The main application will have four primary destinations.
+
+MindVault
+
+Good evening
+
+### Your mind, organized.
+
+A quiet place for everything worth remembering.
+
+### 24
+
+Notes
+
+### 08
+
+Collections
+
+Recent notes
+
+View all
+
+Android project ideas
+
+Ideas · Updated recently
+
+NDK development
+
+Programming · Yesterday
+
+Home
+
+Vault
+
+Search
+
+Explore
+
+Conceptual layout of the main dashboard.
+
+### Screen 1 — Home
+
+Purpose: Display the user's knowledge overview.
+
+Components:
+
+* Greeting and current date.
+
+* Global search shortcut.
+
+* Total note count.
+
+* Collection count.
+
+* Recently edited notes.
+
+* Pinned notes.
+
+* Quick capture button.
+
+* Recent activity.
+
+### Screen 2 — Vault
+
+Purpose: Browse and manage all notes.
+
+Features:
+
+* List and grid views.
+
+* Sort by title, date, and modification time.
+
+* Filter by category.
+
+* Filter by tags.
+
+* Pinned-only filter.
+
+* Archive and delete actions.
+
+### Screen 3 — Note Editor
+
+![core.lib.meta_titles.with_page_number](https://images.openai.com/static-rsc-4/mqzXbp8PRsnzmGBYVRBWbzIbPnZebU5IyLKj19pwt0cgpF17c342V7FkFKiYlhu1ifQQL8svUtySr3HeA4RHnV0mMrNZVoLGZGCJUJn3CU5dsJMa_zRcSxxBe690TvHcBCHCQTo3UyuwDNI3iAMn4KImQfVznlf0QrN0QeK9BPzyuf5BLzeP1fxhmKoIh82n?purpose=fullsize)
+
+This is the most important screen in Phase 1.
+
+Components:
+
+* Title input.
+
+* Rich-looking multiline text editor.
+
+* Category selector.
+
+* Tag management.
+
+* Pin toggle.
+
+* Save indicator.
+
+* Archive action.
+
+* Delete action.
+
+For Phase 1, use a simple text editor with title and body. Rich text formatting can come later.
+
+### Screen 4 — Search
+
+Features:
+
+* Search title and body.
+
+* Search tags.
+
+* Search categories.
+
+* Recent searches.
+
+* Highlight matching text.
+
+* Sort search results.
+
+Use SQLite FTS5 for local full-text indexing.
+
+### Screen 5 — Explore
+
+Initially provides category and tag browsing. Later, this becomes the interactive knowledge graph.
+
+### Screen 6 — Settings
+
+Features:
+
+* Appearance: System, Light, Dark.
+
+* Default note sorting.
+
+* Default view.
+
+* Database information.
+
+* Export and import placeholder for Phase 5.
+
+* About MindVault.
+
+### 4\. Software architecture
+
+I recommend a single-activity, multi-fragment architecture for Phase 1.
+
+This provides a consistent navigation system without creating a separate Activity for every screen.
+
+### Application architecture
+
+MainActivity.java
+
+Navigation host · Toolbar · Bottom navigation
+
+HomeFragment
+
+VaultFragment
+
+SearchFragment
+
+ExploreFragment
+
+SettingsFragment
+
+EditorFragment
+
+ViewModel Layer
+
+UI state · Screen logic · LiveData
+
+Repository Layer
+
+Data coordination · Background execution
+
+Room Database
+
+SQLite · FTS
+
+Native Engine
+
+C++ · JNI
+
+### Architecture responsibilities
+
+| Layer      | Responsibility             |
+| ---------- | -------------------------- |
+| Activities | Host the application       |
+| Fragments  | Display screens            |
+| ViewModels | Manage UI state            |
+| Repository | Coordinate data operations |
+| Room       | Store and retrieve data    |
+| DAO        | Execute database queries   |
+| C++        | Native processing          |
+| XML        | Screen layouts             |
+| Resources  | Themes, icons, colors      |
+
+Important: Activities and Fragments should never execute SQLite queries directly. All database operations go through the Repository using background executors.
+
+### 5\. Complete Android project structure
+
+Use this package name:
+
+`com.mindvault.app`
+
+Recommended structure:
+
+```text
+MindVault/
+│
+├── app/
+│   ├── build.gradle
+│   ├── proguard-rules.pro
+│   └── src/main/
+│       │
+│       ├── AndroidManifest.xml
+│       │
+│       ├── java/com/mindvault/app/
+│       │   │
+│       │   ├── MainActivity.java
+│       │   │
+│       │   ├── data/
+│       │   │   ├── database/
+│       │   │   │   ├── MindVaultDatabase.java
+│       │   │   │   ├── NoteDao.java
+│       │   │   │   ├── CategoryDao.java
+│       │   │   │   ├── TagDao.java
+│       │   │   │   └── entities/
+│       │   │   │       ├── NoteEntity.java
+│       │   │   │       ├── CategoryEntity.java
+│       │   │   │       ├── TagEntity.java
+│       │   │   │       ├── NoteTagEntity.java
+│       │   │   │       └── NoteFtsEntity.java
+│       │   │   │
+│       │   │   ├── repository/
+│       │   │   │   └── NoteRepository.java
+│       │   │   │
+│       │   │   └── preferences/
+│       │   │       └── AppPreferences.java
+│       │   │
+│       │   ├── ui/
+│       │   │   ├── home/
+│       │   │   │   ├── HomeFragment.java
+│       │   │   │   └── HomeViewModel.java
+│       │   │   │
+│       │   │   ├── vault/
+│       │   │   │   ├── VaultFragment.java
+│       │   │   │   └── VaultViewModel.java
+│       │   │   │
+│       │   │   ├── editor/
+│       │   │   │   ├── EditorFragment.java
+│       │   │   │   └── EditorViewModel.java
+│       │   │   │
+│       │   │   ├── search/
+│       │   │   │   ├── SearchFragment.java
+│       │   │   │   └── SearchViewModel.java
+│       │   │   │
+│       │   │   ├── explore/
+│       │   │   │   └── ExploreFragment.java
+│       │   │   │
+│       │   │   └── settings/
+│       │   │       └── SettingsFragment.java
+│       │   │
+│       │   ├── adapters/
+│       │   │   └── NoteAdapter.java
+│       │   │
+│       │   └── nativeengine/
+│       │       └── NativeBridge.java
+│       │
+│       ├── cpp/
+│       │   ├── CMakeLists.txt
+│       │   └── native-lib.cpp
+│       │
+│       └── res/
+│           ├── layout/
+│           │   ├── activity_main.xml
+│           │   ├── fragment_home.xml
+│           │   ├── fragment_vault.xml
+│           │   ├── fragment_editor.xml
+│           │   ├── fragment_search.xml
+│           │   ├── fragment_explore.xml
+│           │   ├── fragment_settings.xml
+│           │   └── item_note.xml
+│           │
+│           ├── menu/
+│           │   └── bottom_navigation.xml
+│           │
+│           ├── navigation/
+│           │   └── nav_graph.xml
+│           │
+│           ├── drawable/
+│           ├── mipmap/
+│           ├── values/
+│           │   ├── colors.xml
+│           │   ├── strings.xml
+│           │   ├── dimens.xml
+│           │   └── themes.xml
+│           │
+│           └── values-night/
+│               ├── colors.xml
+│               └── themes.xml
+│
+└── gradle/
+    └── libs.versions.toml
+```
+
+This structure separates the database, UI, and native engine so that future phases can expand without creating an unmanageable codebase.
+
+### 6\. Database design
+
+The database is the foundation of MindVault.
+
+I recommend SQLite through Android Room.
+
+Database name:
+
+`mindvault.db`
+
+Version:
+
+`1`
+
+### Database entities
+
+### 1\. Notes table
+
+| Column      | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| id          | INTEGER | Primary key            |
+| title       | TEXT    | Note title             |
+| content     | TEXT    | Note body              |
+| category_id | INTEGER | Associated category    |
+| is_pinned   | INTEGER | Pin status             |
+| is_archived | INTEGER | Archive status         |
+| is_deleted  | INTEGER | Soft-delete status     |
+| created_at  | INTEGER | Creation timestamp     |
+| updated_at  | INTEGER | Modification timestamp |
+
+### 2\. Categories table
+
+| Column     | Type    | Description        |
+| ---------- | ------- | ------------------ |
+| id         | INTEGER | Primary key        |
+| name       | TEXT    | Category name      |
+| color      | TEXT    | Category color     |
+| icon       | TEXT    | Icon identifier    |
+| created_at | INTEGER | Creation timestamp |
+
+Initial categories:
+
+* Personal
+
+* Ideas
+
+* Work
+
+* Programming
+
+* Learning
+
+* Projects
+
+* Uncategorized
+
+### 3\. Tags table
+
+| Column     | Type    | Description        |
+| ---------- | ------- | ------------------ |
+| id         | INTEGER | Primary key        |
+| name       | TEXT    | Tag name           |
+| created_at | INTEGER | Creation timestamp |
+
+### 4\. NoteTags table
+
+This is a many-to-many relationship.
+
+A single note can have multiple tags, and a single tag can belong to multiple notes.
+
+| Column  | Type    |
+| ------- | ------- |
+| note_id | INTEGER |
+| tag_id  | INTEGER |
+
+Composite primary key: `(note_id, tag_id)`.
+
+### 5\. NoteFTS table
+
+An SQLite full-text search index.
+
+| Column  | Type |
+| ------- | ---- |
+| title   | TEXT |
+| content | TEXT |
+
+This table indexes note content for efficient local searching.
+
+### Database relationship diagram
+
+```mermaid
+
+erDiagram
+    CATEGORIES ||--o{ NOTES : contains
+    NOTES ||--o{ NOTE_TAGS : has
+    TAGS ||--o{ NOTE_TAGS : assigned
+    NOTES ||--|| NOTE_FTS : indexed
+
+    CATEGORIES {
+        integer id PK
+        text name
+        text color
+        text icon
+    }
+
+    NOTES {
+        integer id PK
+        text title
+        text content
+        integer category_id FK
+        integer is_pinned
+        integer is_archived
+        integer is_deleted
+        integer created_at
+        integer updated_at
+    }
+
+    TAGS {
+        integer id PK
+        text name
+        integer created_at
+    }
+
+    NOTE_TAGS {
+        integer note_id PK,FK
+        integer tag_id PK,FK
+    }
+
+    NOTE_FTS {
+        text title
+        text content
+    }
+```
+
+### Database rules
+
+* Deleting a note should cascade-delete its tag relationships.
+
+* Deleting a category should set associated notes to Uncategorized.
+
+* Deleting a tag should remove its note relationships.
+
+* Normal deletion should initially use a soft-delete flag.
+
+* Search must exclude archived and deleted notes by default.
+
+* Timestamps should use Unix milliseconds.
+
+* All writes must execute away from the main thread.
+
+### 7\. Dependencies and Gradle configuration
+
+Recommended Android Studio configuration:
+
+| Setting         | Value               |
+| --------------- | ------------------- |
+| Language        | Java                |
+| UI              | XML                 |
+| Minimum SDK     | API 26              |
+| Compile SDK     | API 36              |
+| Target SDK      | API 36              |
+| Build system    | Gradle              |
+| Native language | C++17               |
+| Database        | Room                |
+| Navigation      | AndroidX Navigation |
+| UI              | Material Components |
+
+The versions below are a baseline configuration; check compatibility with your installed Android Gradle Plugin and Android Studio before syncing.
+
+### Project dependencies
+
+In `app/build.gradle`:
+
+```groovy
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.mindvault.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.mindvault.app"
+        minSdk 26
+        targetSdk 36
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner
+            "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+            }
+        }
+
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a',
+                       'x86_64'
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+
+    implementation 'androidx.navigation:navigation-fragment:2.9.3'
+    implementation 'androidx.navigation:navigation-ui:2.9.3'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.9.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.9.2'
+
+    implementation 'androidx.room:room-runtime:2.7.2'
+    annotationProcessor 'androidx.room:room-compiler:2.7.2'
+
+    implementation 'androidx.preference:preference:1.2.1'
+}
+```
+
+For Java, use `annotationProcessor` for Room, not Kotlin KSP.
+
+### Required development tools
+
+Install these through Android Studio SDK Manager:
+
+* Android SDK Platform 36.
+
+* Android SDK Build Tools.
+
+* Android SDK Platform Tools.
+
+* NDK side by side.
+
+* CMake.
+
+* Android Emulator.
+
+### 8\. Adaptive light and dark themes
+
+MindVault should support three appearance modes:
+
+* System default.
+
+* Always light.
+
+* Always dark.
+
+The interface should use semantic color resources rather than hardcoded colors in layouts.
+
+### Light theme palette
+
+Background#F7F7FA
+
+Surface#FFFFFF
+
+Primary#465D9A
+
+Secondary#596780
+
+Accent#647DB5
+
+Text#191C24
+
+### Dark theme palette
+
+Background#111318
+
+Surface#191C23
+
+Primary#B3C5FF
+
+Secondary#BBC6DF
+
+Accent#A4B9F5
+
+Text#E2E2EA
+
+### Theme configuration
+
+`res/values/themes.xml`
+
+```xml
+<resources>
+    <style name="Theme.MindVault"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">
+            ?attr/isLightTheme
+        </item>
+
+        <item name="android:navigationBarColor">
+            ?attr/colorSurface
+        </item>
+
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>
+```
+
+Create separate `colors.xml` resources under `values` and `values-night` with the corresponding palettes.
+
+### Theme switching in Java
+
+Use AppCompat's night mode support:
+
+```java
+public void applyTheme(String mode) {
+
+    switch (mode) {
+
+        case "light":
+            AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO
+            );
+            break;
+
+        case "dark":
+            AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_YES
+            );
+            break;
+
+        default:
+            AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            );
+    }
+}
+```
+
+Persist the selected value using SharedPreferences.
+
+### 9\. Phase 1 — Actual implementation
+
+Now we move from architecture to code.
+
+The following implementation establishes the foundation of the application.
+
+### Step 1 — AndroidManifest.xml
+
+No network permission is needed. MindVault must work without internet access.
+
+```xml
+<manifest xmlns:android=
+    "http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="false"
+        android:label="MindVault"
+        android:theme="@style/Theme.MindVault"
+        android:usesCleartextTraffic="false"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name=
+                    "android.intent.action.MAIN"/>
+
+                <category android:name=
+                    "android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+For production, also configure Android backup/data extraction rules to explicitly exclude the database and private files.
+
+### Step 2 — Create the Note entity
+
+File: `data/database/entities/NoteEntity.java`
+
+```java
+package com.mindvault.app.data.database.entities;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+
+@Entity(
+    tableName = "notes",
+    foreignKeys = {
+        @ForeignKey(
+            entity = CategoryEntity.class,
+            parentColumns = "id",
+            childColumns = "category_id",
+            onDelete = ForeignKey.SET_NULL
+        )
+    },
+    indices = {
+        @Index("category_id"),
+        @Index("updated_at")
+    }
+)
+public class NoteEntity {
+
+    @PrimaryKey(autoGenerate = true)
+    public long id;
+
+    public String title;
+
+    public String content;
+
+    @ColumnInfo(name = "category_id")
+    public Long categoryId;
+
+    @ColumnInfo(name = "is_pinned")
+    public boolean isPinned;
+
+    @ColumnInfo(name = "is_archived")
+    public boolean isArchived;
+
+    @ColumnInfo(name = "is_deleted")
+    public boolean isDeleted;
+
+    @ColumnInfo(name = "created_at")
+    public long createdAt;
+
+    @ColumnInfo(name = "updated_at")
+    public long updatedAt;
+
+    public NoteEntity() {
+        title = "";
+        content = "";
+        createdAt = System.currentTimeMillis();
+        updatedAt = createdAt;
+    }
+}
+```
+
+Create `CategoryEntity.java`:
+
+```java
+package com.mindvault.app.data.database.entities;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "categories")
+public class CategoryEntity {
+
+    @PrimaryKey(autoGenerate = true)
+    public long id;
+
+    public String name;
+
+    public String color;
+
+    public String icon;
+
+    public long createdAt;
+}
+```
+
+Create `TagEntity.java`:
+
+```java
+package com.mindvault.app.data.database.entities;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "tags")
+public class TagEntity {
+
+    @PrimaryKey(autoGenerate = true)
+    public long id;
+
+    public String name;
+
+    public long createdAt;
+}
+```
+
+Create `NoteTagEntity.java`:
+
+```java
+package com.mindvault.app.data.database.entities;
+
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+
+@Entity(
+    tableName = "note_tags",
+    primaryKeys = {"note_id", "tag_id"},
+    foreignKeys = {
+        @ForeignKey(
+            entity = NoteEntity.class,
+            parentColumns = "id",
+            childColumns = "note_id",
+            onDelete = ForeignKey.CASCADE
+        ),
+        @ForeignKey(
+            entity = TagEntity.class,
+            parentColumns = "id",
+            childColumns = "tag_id",
+            onDelete = ForeignKey.CASCADE
+        )
+    },
+    indices = {@Index("tag_id")}
+)
+public class NoteTagEntity {
+
+    public long note_id;
+
+    public long tag_id;
+}
+```
+
+### Step 3 — Implement full-text search
+
+Create `NoteFtsEntity.java`.
+
+```java
+package com.mindvault.app.data.database.entities;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Fts4;
+
+@Fts4(contentEntity = NoteEntity.class)
+@Entity(tableName = "note_fts")
+public class NoteFtsEntity {
+
+    @ColumnInfo(name = "title")
+    public String title;
+
+    @ColumnInfo(name = "content")
+    public String content;
+}
+```
+
+Room's FTS external-content support maintains the search index when the underlying note records change.
+
+### Step 4 — Create NoteDao
+
+File: `data/database/NoteDao.java`
+
+```java
+package com.mindvault.app.data.database;
+
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Update;
+import androidx.room.Delete;
+import androidx.room.Query;
+
+import com.mindvault.app.data.database.entities.NoteEntity;
+
+import java.util.List;
+
+@Dao
+public interface NoteDao {
+
+    @Insert
+    long insert(NoteEntity note);
+
+    @Update
+    void update(NoteEntity note);
+
+    @Query("""
+        SELECT * FROM notes
+        WHERE is_deleted = 0
+        AND is_archived = 0
+        ORDER BY is_pinned DESC, updated_at DESC
+    """)
+    LiveData<List<NoteEntity>> getAllNotes();
+
+    @Query("""
+        SELECT * FROM notes
+        WHERE id = :id
+        LIMIT 1
+    """)
+    LiveData<NoteEntity> getNote(long id);
+
+    @Query("""
+        SELECT COUNT(*) FROM notes
+        WHERE is_deleted = 0
+        AND is_archived = 0
+    """)
+    LiveData<Integer> getNoteCount();
+
+    @Query("""
+        SELECT * FROM notes
+        WHERE is_deleted = 0
+        AND is_archived = 0
+        AND id IN (
+            SELECT rowid FROM note_fts
+            WHERE note_fts MATCH :query
+        )
+        ORDER BY updated_at DESC
+    """)
+    LiveData<List<NoteEntity>> searchNotes(String query);
+
+    @Query("""
+        UPDATE notes
+        SET is_deleted = 1,
+            updated_at = :time
+        WHERE id = :id
+    """)
+    void softDelete(long id, long time);
+
+    @Query("""
+        UPDATE notes
+        SET is_pinned = :pinned,
+            updated_at = :time
+        WHERE id = :id
+    """)
+    void setPinned(long id, boolean pinned, long time);
+}
+```
+
+For FTS search, sanitize user input and construct valid FTS expressions. Don't pass arbitrary raw query syntax without handling quotes and operators.
+
+### Step 5 — Create MindVaultDatabase
+
+File: `data/database/MindVaultDatabase.java`
+
+```java
+package com.mindvault.app.data.database;
+
+import android.content.Context;
+
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+import com.mindvault.app.data.database.entities.*;
+
+@Database(
+    entities = {
+        NoteEntity.class,
+        CategoryEntity.class,
+        TagEntity.class,
+        NoteTagEntity.class,
+        NoteFtsEntity.class
+    },
+    version = 1,
+    exportSchema = true
+)
+public abstract class MindVaultDatabase
+        extends RoomDatabase {
+
+    private static volatile MindVaultDatabase INSTANCE;
+
+    public abstract NoteDao noteDao();
+
+    public static MindVaultDatabase getInstance(
+            Context context) {
+
+        if (INSTANCE == null) {
+
+            synchronized (MindVaultDatabase.class) {
+
+                if (INSTANCE == null) {
+
+                    INSTANCE = Room.databaseBuilder(
+                        context.getApplicationContext(),
+                        MindVaultDatabase.class,
+                        "mindvault.db"
+                    )
+                    .build();
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+}
+```
+
+Also create `CategoryDao` and `TagDao` for their CRUD operations before implementing their screens.
+
+Database safety: Keep Room schema export enabled and commit exported schema JSON files to version control. Do not use destructive migrations when users already have valuable notes.
+
+### Step 6 — Create NoteRepository
+
+The Repository separates database operations from the UI.
+
+File: `data/repository/NoteRepository.java`
+
+```java
+package com.mindvault.app.data.repository;
+
+import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+
+import com.mindvault.app.data.database.MindVaultDatabase;
+import com.mindvault.app.data.database.NoteDao;
+import com.mindvault.app.data.database.entities.NoteEntity;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class NoteRepository {
+
+    private final NoteDao noteDao;
+
+    private final ExecutorService executor =
+        Executors.newFixedThreadPool(2);
+
+    public NoteRepository(Context context) {
+
+        MindVaultDatabase db =
+            MindVaultDatabase.getInstance(context);
+
+        noteDao = db.noteDao();
+    }
+
+    public LiveData<List<NoteEntity>> getAllNotes() {
+        return noteDao.getAllNotes();
+    }
+
+    public LiveData<Integer> getNoteCount() {
+        return noteDao.getNoteCount();
+    }
+
+    public void insert(NoteEntity note) {
+        executor.execute(() -> noteDao.insert(note));
+    }
+
+    public void update(NoteEntity note) {
+        executor.execute(() -> {
+
+            note.updatedAt = System.currentTimeMillis();
+
+            noteDao.update(note);
+        });
+    }
+
+    public void delete(long id) {
+        executor.execute(() ->
+            noteDao.softDelete(
+                id,
+                System.currentTimeMillis()
+            )
+        );
+    }
+
+    public void setPinned(long id, boolean pinned) {
+        executor.execute(() ->
+            noteDao.setPinned(
+                id,
+                pinned,
+                System.currentTimeMillis()
+            )
+        );
+    }
+}
+```
+
+For production, expose a repository search method, add lifecycle-aware executor cleanup, and return operation results so the editor can distinguish successful saves from failures.
+
+### Step 7 — Connect the C++ NDK engine
+
+The native engine is deliberately small in Phase 1.
+
+We establish the JNI bridge now so that future graph algorithms, indexing, and native processing can be integrated without restructuring the application.
+
+File: `nativeengine/NativeBridge.java`
+
+```java
+package com.mindvault.app.nativeengine;
+
+public class NativeBridge {
+
+    static {
+        System.loadLibrary("mindvault");
+    }
+
+    public native String getEngineVersion();
+
+    public native int calculateTextLength(String text);
+}
+```
+
+File: `cpp/native-lib.cpp`
+
+```cpp
+#include <jni.h>
+#include <string>
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_mindvault_app_nativeengine_NativeBridge_getEngineVersion(
+        JNIEnv* env,
+        jobject /* this */) {
+
+    std::string version = "MindVault Native Engine 1.0";
+
+    return env->NewStringUTF(version.c_str());
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_mindvault_app_nativeengine_NativeBridge_calculateTextLength(
+        JNIEnv* env,
+        jobject /* this */,
+        jstring text) {
+
+    if (text == nullptr) {
+        return 0;
+    }
+
+    const char* chars = env->GetStringUTFChars(
+        text, nullptr
+    );
+
+    if (chars == nullptr) {
+        return 0;
+    }
+
+    int length = 0;
+
+    for (const char* p = chars; *p; ++p) {
+        ++length;
+    }
+
+    env->ReleaseStringUTFChars(text, chars);
+
+    return length;
+}
+```
+
+Note that this sample calculates modified UTF-8 byte length, not Unicode character count. The method is just a JNI integration test, not the final text-processing implementation.
+
+`cpp/CMakeLists.txt`
+
+```cmake
+cmake_minimum_required(VERSION 3.22.1)
+
+project("mindvault")
+
+add_library(
+    mindvault
+    SHARED
+    native-lib.cpp
+)
+
+find_library(
+    log-lib
+    log
+)
+
+target_link_libraries(
+    mindvault
+    ${log-lib}
+)
+```
+
+We will later expand the native engine into modules:
+
+```text
+cpp/
+├── native-lib.cpp
+├── CMakeLists.txt
+│
+├── core/
+│   ├── text_processor.cpp
+│   └── hash_engine.cpp
+│
+├── search/
+│   ├── index_engine.cpp
+│   └── ranking_engine.cpp
+│
+└── graph/
+    ├── graph_engine.cpp
+    └── relationship_engine.cpp
+```
+
+There is no need to move ordinary Room database operations into C++. Android Room already provides a robust SQLite interface.
+
+### 10\. Main application layout
+
+File: `res/layout/activity_main.xml`
+
+This establishes the primary navigation container.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="MindVault"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_navigation"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+Use a `nav_graph.xml` with Home, Vault, Search, Explore, and Editor destinations. The Editor should not be a permanent bottom navigation destination; open it from the floating action button or a note card.
+
+### Bottom navigation menu
+
+File: `res/menu/bottom_navigation.xml`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/vaultFragment"
+        android:icon="@drawable/ic_vault"
+        android:title="Vault"/>
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search"
+        android:title="Search"/>
+
+    <item
+        android:id="@+id/exploreFragment"
+        android:icon="@drawable/ic_explore"
+        android:title="Explore"/>
+
+</menu>
+```
+
+The drawable icons are project resources to create or import.
+
+### Editor layout specification
+
+`fragment_editor.xml` should contain:
+
+* A MaterialToolbar with back and save actions.
+
+* An EditText for the title.
+
+* A multiline EditText for the body.
+
+* A category dropdown.
+
+* A tag selection control.
+
+* A pin toggle.
+
+* A save status label.
+
+Use a scrollable parent and ensure the keyboard does not cover the editing controls.
+
+Recommended behavior:
+
+* New note: save automatically after a short idle period.
+
+* Existing note: update the same database record.
+
+* Leaving editor: flush pending changes.
+
+* Empty note: do not create a blank database record.
+
+* Failed save: retain the user's text and show an error.
+
+### 11\. MainActivity and navigation integration
+
+File: `MainActivity.java`
+
+```java
+package com.mindvault.app;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+public class MainActivity extends AppCompatActivity {
+
+    private NavController navController;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        MaterialToolbar toolbar =
+            findViewById(R.id.toolbar);
+
+        BottomNavigationView bottomNavigation =
+            findViewById(R.id.bottom_navigation);
+
+        NavHostFragment navHost =
+            (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment);
+
+        navController = navHost.getNavController();
+
+        NavigationUI.setupWithNavController(
+            bottomNavigation,
+            navController
+        );
+
+        NavigationUI.setupWithNavController(
+            toolbar,
+            navController
+        );
+    }
+}
+```
+
+### Navigation graph
+
+File: `res/navigation/nav_graph.xml`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.mindvault.app.ui.home.HomeFragment"
+        android:label="Home"/>
+
+    <fragment
+        android:id="@+id/vaultFragment"
+        android:name="com.mindvault.app.ui.vault.VaultFragment"
+        android:label="Vault"/>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.mindvault.app.ui.search.SearchFragment"
+        android:label="Search"/>
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.mindvault.app.ui.explore.ExploreFragment"
+        android:label="Explore"/>
+
+    <fragment
+        android:id="@+id/editorFragment"
+        android:name="com.mindvault.app.ui.editor.EditorFragment"
+        android:label="Editor">
+
+        <argument
+            android:name="noteId"
+            app:argType="long"
+            android:defaultValue="-1"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.mindvault.app.ui.settings.SettingsFragment"
+        android:label="Settings"/>
+
+</navigation>
+```
+
+The Settings destination can be opened from the toolbar's settings action.
+
+### 12\. Phase 1 UI component specifications
+
+To maintain consistency, establish reusable components instead of designing each screen independently.
+
+| Component       | Implementation             |
+| --------------- | -------------------------- |
+| Note card       | MaterialCardView           |
+| Primary button  | MaterialButton             |
+| Search field    | TextInputLayout            |
+| Editor input    | TextInputEditText          |
+| Category chip   | Chip                       |
+| Tag             | Chip                       |
+| Navigation      | BottomNavigationView       |
+| App toolbar     | MaterialToolbar            |
+| Dialog          | MaterialAlertDialogBuilder |
+| Note collection | RecyclerView               |
+| Empty state     | Custom XML layout          |
+
+### Note card design
+
+![Mobile Notes App by Anton Lapko on Dribbble](https://images.openai.com/static-rsc-4/TMG7hrqbxU5bALK_t_sL0ZYaO4bWzy6GU-8XWJzCo6CX9nvT3aXrccoV6ffljbCtgPaf9Hbq8yYAmBp5fcwUOMlHsaBZzVjMhGcax9vqQwHJcCb0EplM3NojUoK0tWD9q4QbYKGMRMFKyiUnhxz1jyZJe572mMK8ZqaHl7ha_KkBMM_DtrT7ePPZrsxrRMun?purpose=fullsize)
+
+Each card should display:
+
+* Note title.
+
+* First 2–3 lines of content.
+
+* Category indicator.
+
+* Tags.
+
+* Last modified date.
+
+* Pin indicator.
+
+Avoid showing too much information in a single card.
+
+### Empty state design
+
+When there are no notes, don't show an empty white screen.
+
+Display:
+
+* A subtle illustration or icon.
+
+* "Your vault is waiting."
+
+* "Capture your first thought."
+
+* A prominent Create Note action.
+
+This is particularly important for first-time users.
+
+### 13\. Phase 1 execution plan
+
+Here is the implementation order I recommend.
+
+Phase 1 development checklist
+
+Core Vault
+
+0 of 14 tasks
+
+### 0%
+
+Create Android Studio project
+
+Java, XML, API 26+
+
+Configure Gradle and dependencies
+
+Material, Room, Navigation, Lifecycle
+
+Configure C++ NDK and CMake
+
+JNI bridge and native library
+
+Create Room entities
+
+Notes, categories, tags, relationships
+
+Create DAOs and database
+
+CRUD, FTS indexing and migrations
+
+Implement Repository and ViewModels
+
+Background database operations
+
+Build adaptive themes
+
+System, light and dark modes
+
+Build MainActivity and navigation
+
+Toolbar, navigation host, bottom bar
+
+Build Home screen
+
+Overview and recent notes
+
+Build Vault screen
+
+RecyclerView, filtering and sorting
+
+Build Note Editor
+
+Create, update, pin, archive, delete
+
+Build Search screen
+
+Full-text local search
+
+Build Explore and Settings
+
+Categories, tags and appearance
+
+Test persistence and offline behavior
+
+Restart, airplane mode and database tests
+
+Reset checklist
+
+### Suggested development milestones
+
+| Milestone | Deliverable                     |
+| --------- | ------------------------------- |
+| M1        | Project builds successfully     |
+| M2        | Room database works             |
+| M3        | Notes can be created and edited |
+| M4        | Vault displays saved notes      |
+| M5        | Search works offline            |
+| M6        | Light/dark switching works      |
+| M7        | C++ library loads correctly     |
+| M8        | Phase 1 testing completed       |
+
+### 14\. Phase 1 testing requirements
+
+Before moving to Phase 2, verify the following.
+
+| Test                 | Expected result                    |
+| -------------------- | ---------------------------------- |
+| Create note          | Note saved locally                 |
+| Edit note            | Existing record updated            |
+| Restart application  | Notes remain                       |
+| Search note          | Matching records found             |
+| Pin note             | Pinned note moves to top           |
+| Archive note         | Disappears from active vault       |
+| Delete note          | Removed from active results        |
+| Change theme         | Appearance updates                 |
+| System theme change  | System mode follows it             |
+| Disable internet     | All core features continue working |
+| Kill application     | No unsaved text is silently lost   |
+| Launch native engine | JNI library loads successfully     |
+
+Offline verification: Run the app with airplane mode enabled. It should not need a network request to open, create, edit, search, or browse notes.
+
+Privacy qualification: Local-only storage and disabled backup do not automatically mean database encryption. We will address encryption in Phase 5. Users should understand that the initial database is not protected against every form of device-level extraction.
+
+### 15\. What comes after Phase 1?
+
+The architecture is designed to accommodate these future modules.
+
+![Voice Recording UI by Parnian Sabet on Dribbble](https://images.openai.com/static-rsc-4/e0Ru9M_u_3G_5yoCZcM8-wH4hr1CUWZEduKGAbYglIqUGYcPDoDkEHPbWzCCPRjE-a72IxGxpHP8jfjYxLtpZ5a0R34g4vNXU0Ejl8GWKPxPPaIOFr6qOXF9tX1EXmHvC4uOsF3xo8B8UNfQYYXkVLKTu12Pt9IYazfG0Ou7NZWU9F3JFQPOlfkKRGBg8-mp?purpose=fullsize)
+
+Phase 2 — Multimedia Vault
+
+Voice recordings, image attachments, PDF imports, file previews, and document indexing.
+
+![OpenClaw: When Intelligence Meets Memory | by Sin | Feb, 2026 | Medium](https://images.openai.com/static-rsc-4/pc-HoydoROORQhko7b98C7s-qAiW8GROvUxJ0W0Z9rAqmEwuUdG7Fft1JefEStosRbcQ3fWMuA2Y2i0PqADEtYsnxZYsYzL6i91Z1bUn0Rvq_EQ8aGwtanDfn6kATkAcbv6r4IvWucna9oglt-0PNgm75ERilFxGU8QNfDYdirludYJMJ6dCQzQA0jzvIpYY?purpose=fullsize)
+
+Phase 3 — Knowledge Graph
+
+Connect notes, discover relationships, visualize ideas, and explore knowledge networks.
+
+![Kerala Tech Reach - Leading Tech Solutions | Web Development, Mobile Apps & Digital Marketing](https://images.openai.com/static-rsc-4/Krw-9DA_Zuv5mihc4bbhvMIGIUZRwphBrUY7IzH_IWovjff-hn8Ai9SuJ_HfRTJZABe2K7XE0llFqOaGd3sqT6XIPO1qHXnG62ljF3IxekjrTfK7gj-y9iChfYmKEqmy7dzKR9eVY8Nx7a3haov8mdWPOl6ccxoyH-qe1Puhs8cFInyXoyV1rHxAbZiInbWs?purpose=fullsize)
+
+Phase 4 — Offline Intelligence
+
+Local embeddings, semantic search, note summarization, and on-device AI where supported by device hardware.
+
+![Signal выпустил версию 8.0 с функцией Secure Backups для всех платформ / Хабр](https://images.openai.com/static-rsc-4/YSukH5VVNfEsKx6EJs6hNdxm4Npc9UP9szjgUU0tOvSXVnibMFCSTuosDW98aX4a3jSkS5LIDXxPGF7PH2JmGt0hgABoG_RAHbx92amdIs5nSfgmIbN3yE8K2XarhvrpCOpF9sNCnD9c07lF5KxKuVXe2Bt87bAAirzhZ1MTlqiMoK4A9DxoBC-4Za358JG6?purpose=fullsize)
+
+Phase 5 — Security and Performance
+
+Encryption, encrypted backup, restore, native optimization, and database maintenance.
+
+### 16\. Phase 1 completion criteria
+
+The first release should be considered complete when MindVault can:
+
+* Launch without internet.
+
+* Create, edit, and save unlimited notes subject to device storage.
+
+* Organize notes using categories and tags.
+
+* Pin and archive notes.
+
+* Search titles and note contents.
+
+* Preserve information across application restarts.
+
+* Switch between light and dark themes.
+
+* Run the C++ native library successfully.
+
+* Maintain a clean Material Design 3 interface.
+
+### Important implementation decisions
+
+A few things should be finalized during actual coding:
+
+* Add `CategoryDao` and `TagDao` with full CRUD operations.
+
+* Add the FTS database schema and verify Room-generated indexing triggers.
+
+* Implement the Editor's autosave with a debounced background operation and save-failure handling.
+
+* Configure Room schema export and migration tests.
+
+* Add the remaining XML layouts, drawables, ViewModels, and adapters. The snippets above establish the architecture and core implementation, but are not yet a complete buildable project.
+
+### MindVault — Phase 1
+
+Architecture defined
+
+Development target
+
+### Core Vault 1.0
+
+Java · XML · Material 3 · Room · SQLite FTS · C++ NDK
+
+Architecture
+
+Local-first / offline
+
+Interface
+
+Adaptive light / dark
+
+Minimum Android
+
+Android 8.0 (API 26)
+
+Database
+
+mindvault.db
