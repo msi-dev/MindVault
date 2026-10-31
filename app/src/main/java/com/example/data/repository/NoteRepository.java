@@ -89,8 +89,22 @@ public class NoteRepository {
         executor.execute(() -> noteDao.softDelete(id, System.currentTimeMillis()));
     }
 
+    public void permanentDelete(long id) {
+        executor.execute(() -> noteDao.permanentDelete(id));
+    }
+
+    public void deleteMultipleNotes(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return;
+        executor.execute(() -> noteDao.deleteNotesByIds(ids));
+    }
+
     public void setPinned(long id, boolean pinned) {
         executor.execute(() -> noteDao.setPinned(id, pinned, System.currentTimeMillis()));
+    }
+
+    public void setPinnedMultiple(List<Long> ids, boolean pinned) {
+        if (ids == null || ids.isEmpty()) return;
+        executor.execute(() -> noteDao.setPinnedForNotes(ids, pinned, System.currentTimeMillis()));
     }
 
     public void setArchived(long id, boolean archived) {

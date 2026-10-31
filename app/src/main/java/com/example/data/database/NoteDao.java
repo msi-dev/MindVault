@@ -59,4 +59,16 @@ public interface NoteDao {
 
     @Query("UPDATE notes SET is_archived = :archived, updated_at = :time WHERE id = :id")
     void setArchived(long id, boolean archived, long time);
+
+    @Query("DELETE FROM notes WHERE id = :id")
+    void permanentDelete(long id);
+
+    @Query("DELETE FROM notes WHERE id IN (:ids)")
+    void deleteNotesByIds(List<Long> ids);
+
+    @Query("UPDATE notes SET is_pinned = :pinned, updated_at = :time WHERE id IN (:ids)")
+    void setPinnedForNotes(List<Long> ids, boolean pinned, long time);
+
+    @Query("SELECT * FROM notes WHERE id IN (:ids)")
+    List<NoteEntity> getNotesByIdsSync(List<Long> ids);
 }

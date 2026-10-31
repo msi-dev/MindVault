@@ -56,6 +56,22 @@ public class HomeViewModel extends AndroidViewModel {
         repository.setPinned(note.id, !note.isPinned);
     }
 
+    public void permanentDelete(long id) {
+        repository.permanentDelete(id);
+    }
+
+    public void deleteMultipleNotes(java.util.Collection<Long> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            repository.deleteMultipleNotes(new java.util.ArrayList<>(ids));
+        }
+    }
+
+    public void setPinnedMultiple(java.util.Collection<Long> ids, boolean pinned) {
+        if (ids != null && !ids.isEmpty()) {
+            repository.setPinnedMultiple(new java.util.ArrayList<>(ids), pinned);
+        }
+    }
+
     public String getDynamicGreeting() {
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (hour >= 5 && hour < 12) {

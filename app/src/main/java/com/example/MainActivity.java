@@ -38,13 +38,18 @@ public class MainActivity extends AppCompatActivity {
             // Link toolbar with navController
             NavigationUI.setupWithNavController(binding.toolbar, navController);
 
-            // Hide toolbar and bottom nav in full-screen editor destination
+            // Hide toolbar on Home page and full-screen editor destination
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                if (destination.getId() == R.id.editorFragment) {
+                int id = destination.getId();
+                if (id == R.id.editorFragment || id == R.id.homeFragment) {
                     binding.toolbar.setVisibility(View.GONE);
-                    binding.bottomNavigation.setVisibility(View.GONE);
                 } else {
                     binding.toolbar.setVisibility(View.VISIBLE);
+                }
+
+                if (id == R.id.editorFragment) {
+                    binding.bottomNavigation.setVisibility(View.GONE);
+                } else {
                     binding.bottomNavigation.setVisibility(View.VISIBLE);
                 }
             });

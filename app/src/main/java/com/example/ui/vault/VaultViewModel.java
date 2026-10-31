@@ -82,4 +82,20 @@ public class VaultViewModel extends AndroidViewModel {
     public void deleteNote(long id) {
         repository.softDelete(id);
     }
+
+    public void permanentDelete(long id) {
+        repository.permanentDelete(id);
+    }
+
+    public void deleteMultipleNotes(java.util.Collection<Long> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            repository.deleteMultipleNotes(new ArrayList<>(ids));
+        }
+    }
+
+    public void setPinnedMultiple(java.util.Collection<Long> ids, boolean pinned) {
+        if (ids != null && !ids.isEmpty()) {
+            repository.setPinnedMultiple(new ArrayList<>(ids), pinned);
+        }
+    }
 }

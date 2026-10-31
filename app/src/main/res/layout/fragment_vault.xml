@@ -11,50 +11,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Top Header & Filters -->
+        <!-- Top Category Filters Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/surface"
-            android:paddingTop="12dp"
+            android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:elevation="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-
-                <TextView
-                    android:id="@+id/text_vault_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textPrimary"
-                    android:text="@string/vault_title" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_filter_pinned"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_pinned"
-                    app:icon="@drawable/ic_pin"
-                    app:iconSize="16dp"
-                    android:textSize="12sp"
-                    android:paddingHorizontal="12dp" />
-            </LinearLayout>
 
             <!-- Horizontal Category Chips -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:scrollbars="none"
                 android:paddingHorizontal="16dp">
 
@@ -86,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="8dp"
-                android:paddingBottom="96dp"
+                android:paddingBottom="100dp"
                 android:clipToPadding="false" />
 
             <!-- Empty State -->
@@ -137,6 +107,7 @@
         </FrameLayout>
     </LinearLayout>
 
+    <!-- Normal Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_note"
         android:layout_width="wrap_content"
@@ -148,5 +119,100 @@
         app:backgroundTint="@color/primary"
         app:elevation="4dp"
         android:contentDescription="Create new note" />
+
+    <!-- Multi-Selection Action Bar (Visible when multi-selection is active) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_selection_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:strokeColor="@color/primary"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@color/surface">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <ImageButton
+                android:id="@+id/btn_selection_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close"
+                app:tint="@color/textPrimary"
+                android:contentDescription="Cancel selection" />
+
+            <TextView
+                android:id="@+id/text_selection_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:text="1 selected" />
+
+            <!-- Select All -->
+            <ImageButton
+                android:id="@+id/btn_selection_select_all"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_select_all"
+                app:tint="@color/textPrimary"
+                android:contentDescription="Select all" />
+
+            <!-- Pin -->
+            <ImageButton
+                android:id="@+id/btn_selection_pin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_pin"
+                app:tint="@color/primary"
+                android:contentDescription="Pin selected" />
+
+            <!-- Share -->
+            <ImageButton
+                android:id="@+id/btn_selection_share"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_share"
+                app:tint="@color/primary"
+                android:contentDescription="Share selected" />
+
+            <!-- Export -->
+            <ImageButton
+                android:id="@+id/btn_selection_export"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_save"
+                app:tint="@color/primary"
+                android:contentDescription="Export selected" />
+
+            <!-- Delete -->
+            <ImageButton
+                android:id="@+id/btn_selection_delete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_delete"
+                app:tint="#EF4444"
+                android:contentDescription="Delete selected" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

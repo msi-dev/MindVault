@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,6 +85,59 @@ public class SearchFragment extends Fragment implements NoteAdapter.OnNoteClickL
     public void onNotePinToggle(NoteEntity note) {
         viewModel.togglePin(note);
     }
+
+    @Override
+    public void onNoteHold(NoteEntity note, View view) {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(requireContext());
+        View sheetView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_note_hold_actions, null);
+        dialog.setContentView(sheetView);
+
+        TextView titleView = sheetView.findViewById(R.id.text_action_title);
+        TextView pinLabel = sheetView.findViewById(R.id.label_pin);
+        titleView.setText(note.title.isEmpty() ? "Untitled Note" : note.title);
+        pinLabel.setText(note.isPinned ? "Unpin note" : "Pin note on top");
+
+        sheetView.findViewById(R.id.action_pin).setOnClickListener(v -> {
+            dialog.dismiss();
+            viewModel.togglePin(note);
+        });
+
+        sheetView.findViewById(R.id.action_share).setOnClickListener(v -> {
+            dialog.dismiss();
+            com.example.util.NoteFileHelper.shareNote(requireContext(), note);
+        });
+
+        sheetView.findViewById(R.id.action_export).setOnClickListener(v -> {
+            dialog.dismiss();
+            java.io.File exportedFile = com.example.util.NoteFileHelper.exportNote(requireContext(), note);
+            if (exportedFile != null) {
+                com.google.android.material.snackbar.Snackbar.make(binding.getRoot(),
+                        "Exported to: " + exportedFile.getAbsolutePath(),
+                        com.google.android.material.snackbar.Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        sheetView.findViewById(R.id.action_select).setVisibility(View.GONE);
+
+        sheetView.findViewById(R.id.action_delete).setOnClickListener(v -> {
+            dialog.dismiss();
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Delete note?")
+                .setMessage("This will completely remove '" + (note.title.isEmpty() ? "Untitled Note" : note.title) + "' from your vault.")
+                .setPositiveButton("Delete", (d, which) -> {
+                    com.example.data.repository.NoteRepository repo = new com.example.data.repository.NoteRepository(requireContext());
+                    repo.permanentDelete(note.id);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onSelectionChanged(int selectedCount) {}
 
     @Override
     public void onDestroyView() {
